@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  spring_mvc-db:
+    image: postgres:14.1
+    container_name: library-db
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=hibernate_demo_db
+    ports:
+      - "5500:5432"
+    volumes:
+      - ./yardata:/var/lib/postgresql/data
