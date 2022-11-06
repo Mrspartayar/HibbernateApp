@@ -5,16 +5,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import yar.lavr.model.Director;
+import yar.lavr.model.Item;
 import yar.lavr.model.Movie;
 import yar.lavr.model.Person;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+
 
 public class App {
     public static void main(String[] args) {
-        Configuration configuration = new Configuration().addAnnotatedClass(Director.class).addAnnotatedClass(Movie.class);
+        Configuration configuration = new Configuration().addAnnotatedClass(Person.class).addAnnotatedClass(Item.class);
 
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -23,17 +24,21 @@ public class App {
         try {
             session.beginTransaction();
 
+            Person person = new Person("Test cascading", 30);
 
-            Movie movie = session.get(Movie.class,3);
-            Director director = movie.getOwner();
+            person.addItem(new Item("Item1"));
+            person.addItem(new Item("Item2"));
+            person.addItem(new Item("Item3"));
 
-            session.remove(movie);
+//            Item item1 = new Item ("Item1");
+//            Item item2 = new Item ("Item2");
+//            Item item3 = new Item ("Item3");
 
-            movie.setOwner(null); //???
-            director.getMovies().remove(movie);
+//            person.setItems(new ArrayList<>(Collections.singletonList(item)));
 
+            session.save(person);
 
-
+            session.getTransaction().commit();
 
 //            Director newDirector = new Director("Director from project1", 1950);
 //            Movie newMovie = new Movie("Movie2 from project1", 1980,newDirector);
@@ -61,7 +66,7 @@ public class App {
 //            List<Movie> movies = director.getMovies();
 //            System.out.println(movies);
 
-            session.getTransaction().commit();
+
         } finally {
             sessionFactory.close();
         }
