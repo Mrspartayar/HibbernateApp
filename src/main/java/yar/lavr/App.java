@@ -5,11 +5,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import yar.lavr.model.Passport;
 import yar.lavr.model.Person;
+import yar.lavr.model.Principal;
+import yar.lavr.model.School;
 
 public class App {
     public static void main(String[] args) {
         Configuration configuration = new Configuration()
-                .addAnnotatedClass(Person.class).addAnnotatedClass(Passport.class);
+                .addAnnotatedClass(Principal.class).addAnnotatedClass(School.class);
 
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -18,8 +20,17 @@ public class App {
         try {
             session.beginTransaction();
 
-            Person person = session.get(Person.class,10);
-            session.remove(person);
+
+            Principal principal = session.get(Principal.class,7);
+            School school = session.get(School.class,4);
+
+
+            principal.setSchool(school);
+
+            session.save(principal);
+
+
+            session.getTransaction().commit();
 
 
 //            Passport passport = session.get(Passport.class, 10);
@@ -35,12 +46,6 @@ public class App {
 //            session.save(person);
 
 
-
-
-
-            session.getTransaction().commit();
-
-
 //            person.addItem(new Item("Item1"));
 //            person.addItem(new Item("Item2"));
 //            person.addItem(new Item("Item3"));
@@ -50,7 +55,6 @@ public class App {
 //            Item item3 = new Item ("Item3");
 
 //            person.setItems(new ArrayList<>(Collections.singletonList(item)));
-
 
 
 //            Director newDirector = new Director("Director from project1", 1950);

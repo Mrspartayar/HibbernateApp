@@ -17,7 +17,7 @@ public class Passport implements Serializable {
     private int passportNumber;
 
     @OneToOne
-    @JoinColumn(name = "person_id",referencedColumnName = "id")
+    @JoinColumn(name = "principal_id",referencedColumnName = "id")
     private Person person;
 
     public Passport(){}
