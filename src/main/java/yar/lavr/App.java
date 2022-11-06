@@ -1,21 +1,15 @@
 package yar.lavr;
 
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import yar.lavr.model.Director;
-import yar.lavr.model.Item;
-import yar.lavr.model.Movie;
+import yar.lavr.model.Passport;
 import yar.lavr.model.Person;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
 
 public class App {
     public static void main(String[] args) {
-        Configuration configuration = new Configuration().addAnnotatedClass(Person.class).addAnnotatedClass(Item.class);
+        Configuration configuration = new Configuration()
+                .addAnnotatedClass(Person.class).addAnnotatedClass(Passport.class);
 
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -24,11 +18,32 @@ public class App {
         try {
             session.beginTransaction();
 
-            Person person = new Person("Test cascading", 30);
+            Person person = session.get(Person.class,10);
+            session.remove(person);
 
-            person.addItem(new Item("Item1"));
-            person.addItem(new Item("Item2"));
-            person.addItem(new Item("Item3"));
+
+//            Passport passport = session.get(Passport.class, 10);
+//            System.out.println(passport.getPerson().getName());
+
+//            Person person = session.get(Person.class, 10);
+//            System.out.println(person.getPassport().getPassportNumber());
+
+//            Person person = new Person("Test person", 50);
+//            Passport passport = new Passport(12345);
+//
+//            person.setPassport(passport);
+//            session.save(person);
+
+
+
+
+
+            session.getTransaction().commit();
+
+
+//            person.addItem(new Item("Item1"));
+//            person.addItem(new Item("Item2"));
+//            person.addItem(new Item("Item3"));
 
 //            Item item1 = new Item ("Item1");
 //            Item item2 = new Item ("Item2");
@@ -36,9 +51,7 @@ public class App {
 
 //            person.setItems(new ArrayList<>(Collections.singletonList(item)));
 
-            session.save(person);
 
-            session.getTransaction().commit();
 
 //            Director newDirector = new Director("Director from project1", 1950);
 //            Movie newMovie = new Movie("Movie2 from project1", 1980,newDirector);
@@ -65,7 +78,6 @@ public class App {
 //
 //            List<Movie> movies = director.getMovies();
 //            System.out.println(movies);
-
 
         } finally {
             sessionFactory.close();
